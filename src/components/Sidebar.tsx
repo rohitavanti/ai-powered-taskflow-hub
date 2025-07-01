@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { 
   Calendar, 
   CheckSquare, 
@@ -15,6 +15,8 @@ import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 
 const Sidebar = () => {
+  const navigate = useNavigate();
+  
   const navItems = [
     { to: '/', icon: Home, label: 'Dashboard', exact: true },
     { to: '/tasks', icon: CheckSquare, label: 'My Tasks' },
@@ -24,6 +26,10 @@ const Sidebar = () => {
     { to: '/settings', icon: Settings, label: 'Settings' },
   ];
 
+  const handleNewTask = () => {
+    navigate('/tasks');
+  };
+
   return (
     <div className="w-64 bg-card border-r border-border h-screen flex flex-col">
       <div className="p-6 border-b border-border">
@@ -32,7 +38,7 @@ const Sidebar = () => {
       </div>
       
       <div className="p-4">
-        <Button className="w-full mb-6" size="sm">
+        <Button className="w-full mb-6" size="sm" onClick={handleNewTask}>
           <Plus className="w-4 h-4 mr-2" />
           New Task
         </Button>
@@ -66,20 +72,26 @@ const Sidebar = () => {
             Quick Access
           </h3>
           <div className="space-y-1">
-            <div className="flex items-center justify-between px-3 py-2 text-sm text-muted-foreground">
+            <NavLink 
+              to="/tasks"
+              className="flex items-center justify-between px-3 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-accent rounded-lg transition-colors"
+            >
               <div className="flex items-center">
                 <Clock className="w-4 h-4 mr-3" />
                 Today
               </div>
               <span className="bg-primary text-primary-foreground text-xs rounded-full px-2 py-1">3</span>
-            </div>
-            <div className="flex items-center justify-between px-3 py-2 text-sm text-muted-foreground">
+            </NavLink>
+            <NavLink 
+              to="/tasks"
+              className="flex items-center justify-between px-3 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-accent rounded-lg transition-colors"
+            >
               <div className="flex items-center">
                 <Calendar className="w-4 h-4 mr-3" />
                 This Week
               </div>
               <span className="bg-muted text-muted-foreground text-xs rounded-full px-2 py-1">12</span>
-            </div>
+            </NavLink>
           </div>
         </div>
       </nav>
