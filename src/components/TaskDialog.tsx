@@ -41,7 +41,7 @@ interface TaskDialogProps {
 const TaskDialog = ({ task, open, onClose, onSave }: TaskDialogProps) => {
   const [title, setTitle] = useState(task?.title || '');
   const [description, setDescription] = useState(task?.description || '');
-  const [priority, setPriority] = useState(task?.priority || 'medium');
+  const [priority, setPriority] = useState<'low' | 'medium' | 'high'>(task?.priority || 'medium');
   const [dueDate, setDueDate] = useState(task?.dueDate || '');
   const [project, setProject] = useState(task?.project || '');
 
@@ -50,7 +50,7 @@ const TaskDialog = ({ task, open, onClose, onSave }: TaskDialogProps) => {
       id: task?.id,
       title,
       description,
-      priority: priority as 'low' | 'medium' | 'high',
+      priority,
       dueDate: dueDate || undefined,
       project: project || undefined,
       completed: task?.completed || false,
@@ -66,6 +66,10 @@ const TaskDialog = ({ task, open, onClose, onSave }: TaskDialogProps) => {
     setPriority(task?.priority || 'medium');
     setDueDate(task?.dueDate || '');
     setProject(task?.project || '');
+  };
+
+  const handlePriorityChange = (value: string) => {
+    setPriority(value as 'low' | 'medium' | 'high');
   };
 
   return (
@@ -105,7 +109,7 @@ const TaskDialog = ({ task, open, onClose, onSave }: TaskDialogProps) => {
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label>Priority</Label>
-              <Select value={priority} onValueChange={setPriority}>
+              <Select value={priority} onValueChange={handlePriorityChange}>
                 <SelectTrigger>
                   <SelectValue placeholder="Select priority" />
                 </SelectTrigger>
