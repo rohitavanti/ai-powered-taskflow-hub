@@ -1,5 +1,5 @@
-
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { Plus, Search, Filter, CheckSquare, Clock, Flag } from 'lucide-react';
 import Layout from '../components/Layout';
 import TaskDialog from '../components/TaskDialog';
@@ -27,6 +27,7 @@ interface Task {
 }
 
 const Tasks = () => {
+  const [searchParams] = useSearchParams();
   const [tasks, setTasks] = useState<Task[]>([
     {
       id: '1',
@@ -61,6 +62,14 @@ const Tasks = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [filterPriority, setFilterPriority] = useState<string>('all');
   const [filterStatus, setFilterStatus] = useState<string>('all');
+
+  // Handle search from URL parameter
+  useEffect(() => {
+    const urlSearch = searchParams.get('search');
+    if (urlSearch) {
+      setSearchTerm(urlSearch);
+    }
+  }, [searchParams]);
 
   const handleCreateTask = () => {
     setEditingTask(undefined);
@@ -108,7 +117,8 @@ const Tasks = () => {
   };
 
   const filteredTasks = tasks.filter(task => {
-    const matchesSearch = task.title.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesSearch = task.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         (task.description && task.description.toLowerCase().includes(searchTerm.toLowerCase()));
     const matchesPriority = filterPriority === 'all' || task.priority === filterPriority;
     const matchesStatus = filterStatus === 'all' || 
       (filterStatus === 'completed' && task.completed) ||
